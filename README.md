@@ -1,5 +1,7 @@
 <img alt="Modular" src="art/modular.png" width="100%" />
 
+Dev Laravel 11 and Livewire 3 only
+
 # `internachi/modular`
 
 <div>
