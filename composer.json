@@ -1,6 +1,6 @@
 {
     "name": "filefabrik/modular",
-    "description": "Modularize your Laravel apps (do not use this version)",
+    "description": "Modularize your Laravel apps ",
     "keywords": [
         "laravel",
         "modules",
