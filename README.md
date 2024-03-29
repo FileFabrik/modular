@@ -1,6 +1,10 @@
 <img alt="Modular" src="art/modular.png" width="100%" />
 
-Dev Laravel 11 and Livewire 3 only
+Dev Laravel 11 and Livewire 3 fixing some stuff and try out
+
+min Laravel 10 (tested with 11)
+min Livewire 3.4.9
+min php 8.2 
 
 # `internachi/modular`
 

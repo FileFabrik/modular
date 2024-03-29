@@ -3,6 +3,21 @@
 This changelog follows the [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) format,
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+
+## [3.0.0]
+
+### Changed
+
+- Try to straight upgrade to Laravel 10/11 and Livewire 3.
+- min Livewire 3
+- min Php-Version 8.2
+- min Laravel 10 (testing with 11)
+- Allow Livewire 3 for creating Livewire Components (not fully working now)
+
+### Added
+
+- /config/app-modules.php  `config('app-modules.livewire_location')`  and `config('app-modules.livewire_namespace');` perhaps that help BC 
+
 ## [Unreleased]
 
 ### Added
