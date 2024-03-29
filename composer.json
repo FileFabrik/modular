@@ -1,6 +1,6 @@
 {
-    "name": "internachi/modular",
-    "description": "Modularize your Laravel apps",
+    "name": "filefabrik/modular",
+    "description": "Modularize your Laravel apps (do not use this version)",
     "keywords": [
         "laravel",
         "modules",
