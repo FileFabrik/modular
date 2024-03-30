@@ -127,7 +127,8 @@ if (class_exists(MakeCommand::class)) {
                                      ->implode('.')
                 ;
 
-                $this->parser->setViewName("livewire:{$module->name}::{$component_name}");
+                // todo parser for viewName and parser for tag-name which is testable
+                $this->parser->setViewName("{$module->name}::livewire.{$component_name}");
 
                 $fContent = $this->parser->classContents($inline);
                 File::put($classPath, $fContent);
@@ -142,7 +143,9 @@ if (class_exists(MakeCommand::class)) {
 
                 Livewire::component($this->parser->getViewName(), $module->qualify($fully_qualified_component));
 
-                $this->line("<options=bold;fg=green><{$this->parser->getViewName()}/>  your blade or livewire layouts</>");
+                $tagName = "livewire:{$module->name}::{$component_name}";
+
+                $this->line("<options=bold;fg=green>TAG:</>  <{$tagName}/>");
 
                 return $classPath;
             }
