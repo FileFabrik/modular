@@ -1,7 +1,7 @@
 {
   "name": "filefabrik/modular",
   "description": "Modularize your Laravel apps from https://github.com/InterNACHI/modular. testing for laravel 11",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "keywords": [
     "laravel",
     "laravel 11",
