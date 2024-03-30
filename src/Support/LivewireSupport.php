@@ -7,14 +7,12 @@
 
 namespace InterNACHI\Modular\Support;
 
-class Statics
+/**
+ * Prevents from using config('app-modules.livewire_location')
+ */
+class LivewireSupport
 {
 
-    /**
-     * Without the Http
-     * 'Http\\Livewire'
-     */
-    public const LivewireComponentNamespace = 'Livewire';
     /**
      * String segment where to output a created livewire component in the current module
      * older versions uses 'Http/Livewire'
@@ -24,6 +22,11 @@ class Statics
     {
         return config('app-modules.livewire_location');
     }
+
+    /**
+     * Without the Http
+     * 'Http\\Livewire'
+     */
     public static function getLivewireNamespace()
     {
         return config('app-modules.livewire_namespace');

@@ -7,12 +7,12 @@
 
 namespace InterNACHI\Modular\Tests\Commands;
 
-use InterNACHI\Modular\Support\Statics;
+use InterNACHI\Modular\Support\LivewireSupport;
 
 /**
  * Override if need
  */
-class SupportStatics extends Statics
+class SupportLivewireSupport extends LivewireSupport
 {
 
     /**

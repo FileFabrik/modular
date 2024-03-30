@@ -3,7 +3,7 @@
 namespace InterNACHI\Modular\Tests\Commands\Make;
 
 use InterNACHI\Modular\Console\Commands\Make\MakeLivewire;
-use InterNACHI\Modular\Tests\Commands\SupportStatics;
+use InterNACHI\Modular\Tests\Commands\SupportLivewireSupport;
 use InterNACHI\Modular\Tests\Concerns\TestsMakeCommands;
 use InterNACHI\Modular\Tests\Concerns\WritesToAppFilesystem;
 use InterNACHI\Modular\Tests\TestCase;
@@ -44,12 +44,12 @@ class MakeLivewireTest extends TestCase
     {
         $command = MakeLivewire::class;
 
-        $arguments           = ['name' => SupportStatics::TestingLivewireComponentName];
+        $arguments           = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
         $expected_path       =
-            'src/' . SupportStatics::getLivewireLocation() . '/' . SupportStatics::TestingLivewireComponentName . '.php';
+            'src/' . SupportLivewireSupport::getLivewireLocation() . '/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
         $expected_substrings = [
-            'namespace Modules\TestModule\\' . SupportStatics::getLivewireNamespace(),
-            'class ' . SupportStatics::TestingLivewireComponentName,
+            'namespace Modules\TestModule\\' . SupportLivewireSupport::getLivewireNamespace(),
+            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
         ];
 
         $this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
@@ -61,12 +61,12 @@ class MakeLivewireTest extends TestCase
     public function test_it_scaffolds_a_component_with_nested_folders(): void
     {
         $command             = MakeLivewire::class;
-        $arguments           = ['name' => 'test.my-component/' . SupportStatics::TestingLivewireComponentName];
+        $arguments           = ['name' => 'test.my-component/' . SupportLivewireSupport::TestingLivewireComponentName];
         $expected_path       =
-            'src/' . SupportStatics::getLivewireLocation() . '/Test/MyComponent/' . SupportStatics::TestingLivewireComponentName . '.php';
+            'src/' . SupportLivewireSupport::getLivewireLocation() . '/Test/MyComponent/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
         $expected_substrings = [
-            'namespace Modules\TestModule\\' . SupportStatics::getLivewireNamespace() . '\Test\MyComponent',
-            'class ' . SupportStatics::TestingLivewireComponentName,
+            'namespace Modules\TestModule\\' . SupportLivewireSupport::getLivewireNamespace() . '\Test\MyComponent',
+            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
         ];
 
         $this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
@@ -78,12 +78,12 @@ class MakeLivewireTest extends TestCase
     public function test_it_scaffolds_a_component_in_the_app_when_module_option_is_missing(): void
     {
         $command             = MakeLivewire::class;
-        $arguments           = ['name' => SupportStatics::TestingLivewireComponentName];
+        $arguments           = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
         $expected_path       =
-            'app/' . SupportStatics::getLivewireLocation() . '/' . SupportStatics::TestingLivewireComponentName . '.php';
+            'app/' . SupportLivewireSupport::getLivewireLocation() . '/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
         $expected_substrings = [
-            'namespace App\\' . SupportStatics::getLivewireNamespace(),
-            'class ' . SupportStatics::TestingLivewireComponentName,
+            'namespace App\\' . SupportLivewireSupport::getLivewireNamespace(),
+            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
         ];
 
         $this->assertBaseCommandResults($command, $arguments, $expected_path, $expected_substrings);

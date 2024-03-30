@@ -10,7 +10,7 @@ use InterNACHI\Modular\Console\Commands\Make\MakeLivewire;
 use InterNACHI\Modular\Console\Commands\Make\MakeModel;
 use InterNACHI\Modular\Support\AutoDiscoveryHelper;
 use InterNACHI\Modular\Support\ModuleRegistry;
-use InterNACHI\Modular\Tests\Commands\SupportStatics;
+use InterNACHI\Modular\Tests\Commands\SupportLivewireSupport;
 use InterNACHI\Modular\Tests\Concerns\WritesToAppFilesystem;
 use Livewire\Livewire;
 use Livewire\LivewireServiceProvider;
@@ -251,10 +251,10 @@ class AutoDiscoveryHelperTest extends TestCase
         ;
 
         // $this->assertContains($this->module1->path('src/Http/Livewire/TestComponent.php'), $resolved);
-        $this->assertContains($this->module1->path('src/' . SupportStatics::getLivewireLocation() . '/TestComponent.php'),
+        $this->assertContains($this->module1->path('src/' . SupportLivewireSupport::getLivewireLocation() . '/TestComponent.php'),
                               $resolved);
 
-        $this->assertContains($this->module2->path('src/' . SupportStatics::getLivewireLocation() . '/TestComponent.php'),
+        $this->assertContains($this->module2->path('src/' . SupportLivewireSupport::getLivewireLocation() . '/TestComponent.php'),
                               $resolved);
     }
 

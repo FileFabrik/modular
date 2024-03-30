@@ -81,14 +81,14 @@ return [
     /*
      * Keep analog to livewire_namespace
      * String segment where to output a created livewire component in the current module
-     * older versions uses 'Http/Livewire'
-     * newer versions have to use 'Livewire', means in the regular app/Livewire and in your Module app-modules/my-module/src/Livewire
+     * older versions uses 'Http/SupportLivewire'
+     * newer versions have to use 'SupportLivewire', means in the regular app/SupportLivewire and in your Module app-modules/my-module/src/SupportLivewire
      */
     'livewire_location'  => 'Livewire',
 
     /*
      *
-     * older Versions 'Http\\Livewire'
+     * older Versions 'Http\\SupportLivewire'
      * newer Versions Without the Http
      */
     'livewire_namespace' => 'Livewire',

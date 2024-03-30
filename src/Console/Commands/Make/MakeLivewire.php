@@ -2,68 +2,114 @@
 
 namespace InterNACHI\Modular\Console\Commands\Make;
 
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
-use InterNACHI\Modular\Support\Statics;
+use InterNACHI\Modular\Support\Helper\LivewireComponentParser;
+use InterNACHI\Modular\Support\LivewireSupport;
 use Livewire\Features\SupportConsoleCommands\Commands\MakeCommand;
 use Livewire\Livewire;
 
 if (class_exists(MakeCommand::class)) {
+    /**
+     * @property LivewireComponentParser $parser
+     */
     class MakeLivewire extends MakeCommand
     {
         use Modularize;
+
+        protected $parser;
 
         public function getAliases(): array
         {
             return ['make:livewire', 'livewire:make'];
         }
 
+        /**
+         * ugly copied the Livewire MakeCommand handle method to override the viewName()
+         *
+         */
+        protected function parentHandle()
+        {
+            $this->parser = new LivewireComponentParser(
+                config('livewire.class_namespace'),
+                config('livewire.view_path'),
+                $this->argument('name'),
+                $this->option('stub'),
+            );
+
+            // important the your-module-name::livewire.klicker
+            $this->parser->setModule($this->module());
+
+            if (!$this->isClassNameValid($name = $this->parser->className())) {
+                $this->line("<options=bold,reverse;fg=red> WHOOPS! </> 😳 \n");
+                $this->line("<fg=red;options=bold>Class is invalid:</> {$name}");
+
+                return;
+            }
+
+            if ($this->isReservedClassName($name)) {
+                $this->line("<options=bold,reverse;fg=red> WHOOPS! </> 😳 \n");
+                $this->line("<fg=red;options=bold>Class is reserved:</> {$name}");
+
+                return;
+            }
+
+            $force    = $this->option('force');
+            $inline   = $this->option('inline');
+            $test     = $this->option('test') || $this->option('pest');
+            $testType = $this->option('pest') ? 'pest' : 'phpunit';
+
+            $showWelcomeMessage = $this->isFirstTimeMakingAComponent();
+
+            $class = $this->createClass($force, $inline);
+            $view  = $this->createView($force, $inline);
+
+            if ($test) {
+                $test = $this->createTest($force, $testType);
+            }
+
+            if ($class || $view) {
+                $this->line("<options=bold,reverse;fg=green> COMPONENT CREATED </> 🤙\n");
+                $class && $this->line("<options=bold;fg=green>CLASS:</> {$this->parser->relativeClassPath()}");
+
+                if (!$inline) {
+                    $view && $this->line("<options=bold;fg=green>VIEW:</>  {$this->parser->relativeViewPath()}");
+                }
+
+                if ($test) {
+                    $test && $this->line("<options=bold;fg=green>TEST:</>  {$this->parser->relativeTestPath()}");
+                }
+
+                if ($showWelcomeMessage && !app()->runningUnitTests()) {
+                    $this->writeWelcomeMessage();
+                }
+            }
+        }
+
         public function handle()
         {
             if ($module = $this->module()) {
-                Config::set('livewire.class_namespace', $module->qualify(Statics::getLivewireNamespace()));
+                Config::set('livewire.class_namespace', $module->qualify(LivewireSupport::getLivewireNamespace()));
                 Config::set('livewire.view_path', $module->path('resources/views/livewire'));
-
-                $app = $this->getLaravel();
-
-                $defaultManifestPath = $app['livewire']->isRunningServerless()
-                    ? '/tmp/storage/bootstrap/cache/livewire-components.php'
-                    : $app->bootstrapPath('cache/livewire-components.php');
-                /*
-                 * https://github.com/InterNACHI/modular/pull/60/files
-                                $componentsFinder = new LivewireComponentsFinder(
-                                    new Filesystem(),
-                                    Config::get('livewire.manifest_path') ?? $defaultManifestPath,
-                                    $module->path('src/' . Statics::getLivewireLocation()),
-                                );
-
-                                $app->instance(LivewireComponentsFinder::class, $componentsFinder);*/
-                if (class_exists("Livewire\LivewireComponentsFinder")) {
-                    $componentsFinder = new \Livewire\LivewireComponentsFinder(
-                        new Filesystem(),
-                        Config::get('livewire.manifest_path') ?? $defaultManifestPath,
-                        $module->path('src/' . Statics::getLivewireLocation()),
-                    );
-
-                    $app->instance(\Livewire\LivewireComponentsFinder::class, $componentsFinder);
-                }
+                $this->parentHandle();
             }
-
-            parent::handle();
+            else {
+                parent::handle();
+            }
         }
 
         protected function createClass($force = false, $inline = false)
         {
             if ($module = $this->module()) {
+                // todo move out to make it testable
                 $name = Str::of($this->argument('name'))
                            ->split('/[.\/(\\\\)]+/')
                            ->map([Str::class, 'studly'])
                            ->join(DIRECTORY_SEPARATOR)
                 ;
 
-                $classPath = $module->path('src/' . Statics::getLivewireLocation() . '/' . $name . '.php');
+                $classPath = $module->path('src/' . LivewireSupport::getLivewireLocation() . '/' . $name . '.php');
 
                 if (File::exists($classPath) && !$force) {
                     $this->line("<options=bold,reverse;fg=red> WHOOPS-IE-TOOTLES </> 😳 \n");
@@ -73,9 +119,7 @@ if (class_exists(MakeCommand::class)) {
                 }
 
                 $this->ensureDirectoryExists($classPath);
-
-                File::put($classPath, $this->parser->classContents($inline));
-
+                // todo move out to make it testable
                 $component_name = Str::of($name)
                                      ->explode('/')
                                      ->filter()
@@ -83,14 +127,22 @@ if (class_exists(MakeCommand::class)) {
                                      ->implode('.')
                 ;
 
+                $this->parser->setViewName("{$module->name}::{$component_name}");
+
+                $fContent = $this->parser->classContents($inline);
+                File::put($classPath, $fContent);
+
+                // todo move out to make it testable
                 $fully_qualified_component = Str::of($this->argument('name'))
-                                                ->prepend(Statics::getLivewireNamespace() . '/')
+                                                ->prepend(LivewireSupport::getLivewireNamespace() . '/')
                                                 ->split('/[.\/(\\\\)]+/')
                                                 ->map([Str::class, 'studly'])
                                                 ->join('\\')
                 ;
 
-                Livewire::component("{$module->name}::{$component_name}", $module->qualify($fully_qualified_component));
+                Livewire::component($this->parser->getViewName(), $module->qualify($fully_qualified_component));
+
+                $this->line("<options=bold;fg=green>use into your blade or livewire layouts: <{$this->parser->getViewName()}/>  {$this->parser->relativeViewPath()}");
 
                 return $classPath;
             }
