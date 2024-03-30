@@ -13,92 +13,90 @@ use Livewire\LivewireServiceProvider;
 
 class MakeLivewireTest extends TestCase
 {
-    use WritesToAppFilesystem;
-    use TestsMakeCommands;
+	use WritesToAppFilesystem;
+	use TestsMakeCommands;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
+	protected function setUp(): void
+	{
+		parent::setUp();
 
-        if (!class_exists(Livewire::class)) {
-            $this->markTestSkipped('Livewire is not installed.');
-        }
-    }
+		if (! class_exists(Livewire::class)) {
+			$this->markTestSkipped('Livewire is not installed.');
+		}
+	}
 
-    public function test_it_overrides_the_default_commands(): void
-    {
-        $this->requiresLaravelVersion('10.0');
+	public function test_it_overrides_the_default_commands(): void
+	{
+		$this->requiresLaravelVersion('10.0');
 
-        $this->artisan('make:livewire', ['--help' => true])
-             ->expectsOutputToContain('--module')
-             ->assertExitCode(0)
-        ;
+		$this->artisan('make:livewire', ['--help' => true])
+			 ->expectsOutputToContain('--module')
+			 ->assertExitCode(0);
 
-        $this->artisan('livewire:make', ['--help' => true])
-             ->expectsOutputToContain('--module')
-             ->assertExitCode(0)
-        ;
-    }
+		$this->artisan('livewire:make', ['--help' => true])
+			 ->expectsOutputToContain('--module')
+			 ->assertExitCode(0);
+	}
 
-    public function test_it_scaffolds_a_component_in_the_module_when_module_option_is_set(): void
-    {
-        $command = MakeLivewire::class;
+	public function test_it_scaffolds_a_component_in_the_module_when_module_option_is_set(): void
+	{
+		$command = MakeLivewire::class;
 
-        $arguments           = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
-        $expected_path       =
-            'src/' . SupportLivewireSupport::getLivewireLocation() . '/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
-        $expected_substrings = [
-            'namespace Modules\TestModule\\' . SupportLivewireSupport::getLivewireNamespace(),
-            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
-        ];
+		$arguments = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
+		$expected_path =
+			'src/'.SupportLivewireSupport::getLivewireLocation().'/'.SupportLivewireSupport::TestingLivewireComponentName.'.php';
+		$expected_substrings = [
+			'namespace Modules\TestModule\\'.SupportLivewireSupport::getLivewireNamespace(),
+			'class '.SupportLivewireSupport::TestingLivewireComponentName,
+		];
 
-        $this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
+		$this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
 
-        $expected_view_path = 'resources/views/livewire/test-livewire-component.blade.php';
-        $this->assertModuleFile($expected_view_path);
-    }
+		$expected_view_path = 'resources/views/livewire/test-livewire-component.blade.php';
+		$this->assertModuleFile($expected_view_path);
+	}
 
-    public function test_it_scaffolds_a_component_with_nested_folders(): void
-    {
-        $command             = MakeLivewire::class;
-        $arguments           = ['name' => 'test.my-component/' . SupportLivewireSupport::TestingLivewireComponentName];
-        $expected_path       =
-            'src/' . SupportLivewireSupport::getLivewireLocation() . '/Test/MyComponent/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
-        $expected_substrings = [
-            'namespace Modules\TestModule\\' . SupportLivewireSupport::getLivewireNamespace() . '\Test\MyComponent',
-            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
-        ];
+	public function test_it_scaffolds_a_component_with_nested_folders(): void
+	{
+		$command = MakeLivewire::class;
+		$arguments = ['name' => 'test.my-component/'.SupportLivewireSupport::TestingLivewireComponentName];
+		$expected_path =
+			'src/'.SupportLivewireSupport::getLivewireLocation().'/Test/MyComponent/'.SupportLivewireSupport::TestingLivewireComponentName.'.php';
+		$expected_substrings = [
+			'namespace Modules\TestModule\\'.SupportLivewireSupport::getLivewireNamespace().'\Test\MyComponent',
+			'class '.SupportLivewireSupport::TestingLivewireComponentName,
+		];
 
-        $this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
+		$this->assertModuleCommandResults($command, $arguments, $expected_path, $expected_substrings);
 
-        $expected_view_path = 'resources/views/livewire/test/my-component/test-livewire-component.blade.php';
-        $this->assertModuleFile($expected_view_path);
-    }
+		$expected_view_path = 'resources/views/livewire/test/my-component/test-livewire-component.blade.php';
+		$this->assertModuleFile($expected_view_path);
+	}
 
-    public function test_it_scaffolds_a_component_in_the_app_when_module_option_is_missing(): void
-    {
-        $command             = MakeLivewire::class;
-        $arguments           = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
-        $expected_path       =
-            'app/' . SupportLivewireSupport::getLivewireLocation() . '/' . SupportLivewireSupport::TestingLivewireComponentName . '.php';
-        $expected_substrings = [
-            'namespace App\\' . SupportLivewireSupport::getLivewireNamespace(),
-            'class ' . SupportLivewireSupport::TestingLivewireComponentName,
-        ];
+	public function test_it_scaffolds_a_component_in_the_app_when_module_option_is_missing(): void
+	{
+		$command = MakeLivewire::class;
+		$arguments = ['name' => SupportLivewireSupport::TestingLivewireComponentName];
+		$expected_path =
+			'app/'.SupportLivewireSupport::getLivewireLocation().'/'.SupportLivewireSupport::TestingLivewireComponentName.'.php';
+		$expected_substrings = [
+			'namespace App\\'.SupportLivewireSupport::getLivewireNamespace(),
+			'class '.SupportLivewireSupport::TestingLivewireComponentName,
+		];
 
-        $this->assertBaseCommandResults($command, $arguments, $expected_path, $expected_substrings);
+		$this->assertBaseCommandResults($command, $arguments, $expected_path, $expected_substrings);
 
-        $expected_view_path = 'resources/views/livewire/test-livewire-component.blade.php';
-        $this->assertBaseFile($expected_view_path);
-    }
+		$expected_view_path = 'resources/views/livewire/test-livewire-component.blade.php';
+		$this->assertBaseFile($expected_view_path);
+	}
 
-    protected function getPackageProviders($app)
-    {
-        return array_merge(parent::getPackageProviders($app), [LivewireServiceProvider::class]);
-    }
+	protected function getPackageProviders($app)
+	{
+		return array_merge(parent::getPackageProviders($app), [LivewireServiceProvider::class]);
+	}
 
-    protected function getPackageAliases($app)
-    {
-        return array_merge(parent::getPackageAliases($app), ['Livewire' => LivewireManager::class]);
-    }
+	protected function getPackageAliases($app)
+	{
+		return array_merge(parent::getPackageAliases($app), ['Livewire' => LivewireManager::class]);
+	}
 }

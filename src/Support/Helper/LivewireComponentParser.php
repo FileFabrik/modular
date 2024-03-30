@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * PHP version 8.2
- *
  */
 /** @copyright-header * */
 
@@ -16,64 +17,62 @@ use Livewire\Features\SupportConsoleCommands\Commands\ComponentParser;
  */
 class LivewireComponentParser extends ComponentParser
 {
+	/**
+	 * @var string|null
+	 */
+	private ?string $viewName = null;
 
-    /**
-     * @var string|null
-     */
-    private ?string $viewName = null;
-    /**
-     * @var ModuleConfig|null
-     */
-    private ?ModuleConfig $moduleConfig = null;
+	/**
+	 * @var ModuleConfig|null
+	 */
+	private ?ModuleConfig $moduleConfig = null;
 
-    /**
-     * @param ModuleConfig $moduleConfig
-     *
-     * @return void
-     */
-    public function setModule(ModuleConfig $moduleConfig)
-    {
-        $this->moduleConfig = $moduleConfig;
-    }
+	/**
+	 * @param ModuleConfig $moduleConfig
+	 *
+	 * @return void
+	 */
+	public function setModule(ModuleConfig $moduleConfig)
+	{
+		$this->moduleConfig = $moduleConfig;
+	}
 
-    /**
-     * @return string
-     */
-    public function viewName()
-    {
-        // refer to https://github.com/InterNACHI/modular/issues/85
-        if (null === $this->moduleConfig) {
-            return parent::viewName();
-        }
+	/**
+	 * @return string
+	 */
+	public function viewName()
+	{
+		// refer to https://github.com/InterNACHI/modular/issues/85
+		if (null === $this->moduleConfig) {
+			return parent::viewName();
+		}
 
-        // otherwise make own component name
-        // todo, has to be testet
-        return $this->viewName ??= $this->moduleConfig->name . '::' .
-            collect()
-                ->filter()
-                ->concat($this->directories)
-                ->map([Str::class, 'kebab'])
-                ->push($this->component)
-                ->implode('.')
-        ;
-    }
+		// otherwise make own component name
+		// todo, has to be testet
+		return $this->viewName ??= $this->moduleConfig->name.'::'.
+			collect()
+				->filter()
+				->concat($this->directories)
+				->map([Str::class, 'kebab'])
+				->push($this->component)
+				->implode('.');
+	}
 
-    /**
-     * @param string|null $viewName
-     *
-     * @return void
-     */
-    public function setViewName(?string $viewName): void
-    {
-        $this->viewName = $viewName;
-    }
+	/**
+	 * @param string|null $viewName
+	 *
+	 * @return void
+	 */
+	public function setViewName(?string $viewName): void
+	{
+		$this->viewName = $viewName;
+	}
 
-    /**
-     * @return string|null
-     */
-    public function getViewName(): ?string
-    {
-        return $this->viewName;
-    }
-
+	/**
+	 * @return string|null
+	 */
+	public function getViewName(): ?string
+	{
+		return $this->viewName;
+	}
 }

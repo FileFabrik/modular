@@ -31,7 +31,6 @@ use InterNACHI\Modular\Console\Commands\Make\MakeResource;
 use InterNACHI\Modular\Console\Commands\Make\MakeRule;
 use InterNACHI\Modular\Console\Commands\Make\MakeSeeder;
 use InterNACHI\Modular\Console\Commands\Make\MakeTest;
-
 use Livewire\Features\SupportConsoleCommands\Commands as Livewire;
 
 class ModularizedCommandsServiceProvider extends ServiceProvider

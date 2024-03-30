@@ -1,7 +1,8 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * PHP version 8.2
- *
  */
 /** @copyright-header * */
 
@@ -14,10 +15,9 @@ use InterNACHI\Modular\Support\LivewireSupport;
  */
 class SupportLivewireSupport extends LivewireSupport
 {
-
-    /**
-     * Livewire Test-Component Name in tests to prevent from "handwritten" stuff inside tests
-     * do not use strings in tests ...
-     */
-    public const TestingLivewireComponentName = 'TestLivewireComponent';
+	/**
+	 * Livewire Test-Component Name in tests to prevent from "handwritten" stuff inside tests
+	 * do not use strings in tests ...
+	 */
+	public const TestingLivewireComponentName = 'TestLivewireComponent';
 }
