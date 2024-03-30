@@ -1,12 +1,60 @@
-<img alt="Modular" src="art/modular.png" width="100%" />
+# Testing-Version
 
 Dev Laravel 11 and SupportLivewire 3 fixing some stuff and try out
 
-min Laravel 10 (tested with 11)
-min SupportLivewire 3.4.9
-min php 8.2 
+min Laravel 10 (tested with Laravel 11)
+min SupportLivewire 3.4
+min php 8.2
 
-# `internachi/modular`
+Works with Laravel 11 and Livewire 3
+<img alt="Modular" src="art/docs/2024-03-30_06-39.webp" width="100%" />
+
+The package in this Git Repository was renamed from `internachi/modular` to `filefabrik/modular`.
+
+Reason is, that I do not have access to `internachi/modular` Packagist-Registry.
+
+At the Moment I want to have a public Packagist so current playground is usable for everyone.
+
+https://packagist.org/packages/filefabrik/modular/
+
+Namespaces in `filefabrik/modular` are the same as in `internachi/modular` (`InterNACHI\\Modular\\`)
+It means, `internachi/modular` and `filefabrik/modular` can not coexist in the same Laravel installation.
+
+`filefabrik/modular` can be merged into the `internachi/modular` with the `internachi` vendor prefix.
+
+## composer install
+
+* If already installed the original `internachi/modular` backup the file `/config/app-modules.php`, if it was published
+  into Laravel 'internachi/modular'  `/config/app-modules.php`
+
+Then remove the original from your composer `internachi/modular` or uninstall it via composer
+
+```shell script
+composer remove internachi/modular
+``` 
+
+After uninstall the original install this filefabrik version of modules
+
+```shell script
+composer install filefabrik/modular
+``` 
+
+current version is 3.0.3
+
+```shell script
+php artisan vendor:publish 
+``` 
+
+Please select `modular-config`
+
+<img alt="Modular" src="art/docs/2024-03-30_06-36.webp" width="100%" />
+
+
+--- original from internachi
+
+<img alt="Modular" src="art/modular.png" width="100%" />
+
+## `internachi/modular`
 
 <div>
 	<a href="https://github.com/InterNACHI/modular/actions/workflows/phpunit.yml" target="_blank">
@@ -48,13 +96,13 @@ min php 8.2
 </div>
 
 `internachi/modular` is a module system for Laravel applications. It uses
-[Composer path repositories](https://getcomposer.org/doc/05-repositories.md#path) for autoloading, 
+[Composer path repositories](https://getcomposer.org/doc/05-repositories.md#path) for autoloading,
 and [Laravel package discovery](https://laravel.com/docs/7.x/packages#package-discovery) for module
 initialization, and then provides minimal tooling to fill in any gaps.
 
 This project is as much a set of conventions as it is a package. The fundamental idea
 is that you can create “modules” in a separate `app-modules/` directory, which allows you to
-better organize large projects. These modules use the existing 
+better organize large projects. These modules use the existing
 [Laravel package system](https://laravel.com/docs/7.x/packages), and follow existing Laravel
 conventions.
 
@@ -140,7 +188,7 @@ You may even want to add it to your `post-autoload-dump` scripts in your applica
 
 ## Usage
 
-All modules follow existing Laravel conventions, and auto-discovery 
+All modules follow existing Laravel conventions, and auto-discovery
 should work as expected in most cases:
 
 - Commands are auto-registered with Artisan
@@ -199,7 +247,8 @@ option to the `db:seed` command. If you pass the `--module` option to `db:seed`,
 for your seeder within your module namespace:
 
 - `php artisan db:seed --module=[module name]` will try to call `Modules\MyModule\Database\Seeders\DatabaseSeeder`
-- `php artisan db:seed --class=MySeeder --module=[module name]` will try to call `Modules\MyModule\Database\Seeders\MySeeder`
+- `php artisan db:seed --class=MySeeder --module=[module name]` will try to
+  call `Modules\MyModule\Database\Seeders\MySeeder`
 
 #### Vendor Commands
 
@@ -211,7 +260,8 @@ that we support is Livewire. If you have Livewire installed, you can run:
 #### Blade Components
 
 Your [Laravel Blade components](https://laravel.com/docs/blade#components) will be
-automatically registered for you under a [component namespace](https://laravel.com/docs/9.x/blade#manually-registering-package-components).
+automatically registered for you under
+a [component namespace](https://laravel.com/docs/9.x/blade#manually-registering-package-components).
 A few examples:
 
 | File                                                               | Component                      |
@@ -225,23 +275,23 @@ A few examples:
 
 #### Customizing the Default Module Structure
 
-When you call `make:module`, Modular will scaffold some basic boilerplate for you. If you 
+When you call `make:module`, Modular will scaffold some basic boilerplate for you. If you
 would like to customize this behavior, you can do so by publishing the `app-modules.php`
 config file and adding your own stubs.
 
 Both filenames and file contents support a number of placeholders. These include:
 
- - `StubBasePath`
- - `StubModuleNamespace`
- - `StubComposerNamespace`
- - `StubModuleNameSingular`
- - `StubModuleNamePlural`
- - `StubModuleName`
- - `StubClassNamePrefix`
- - `StubComposerName`
- - `StubMigrationPrefix`
- - `StubFullyQualifiedTestCaseBase`
- - `StubTestCaseBase`
+- `StubBasePath`
+- `StubModuleNamespace`
+- `StubComposerNamespace`
+- `StubModuleNameSingular`
+- `StubModuleNamePlural`
+- `StubModuleName`
+- `StubClassNamePrefix`
+- `StubComposerName`
+- `StubMigrationPrefix`
+- `StubFullyQualifiedTestCaseBase`
+- `StubTestCaseBase`
 
 ## Comparison to `nwidart/laravel-modules`
 
