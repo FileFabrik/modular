@@ -18,6 +18,7 @@ class StubsWriter
     {
         $this->title('Creating initial module files');
 
+        // do not use right here. all stuff has to be configured before
         $tests_base = config('app-modules.tests_base', 'Tests\TestCase');
 
         $placeholders = [

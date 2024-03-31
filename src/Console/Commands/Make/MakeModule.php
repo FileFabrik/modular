@@ -81,6 +81,8 @@ class MakeModule extends Command
 
         $this->filesystem      = $filesystem;
         $this->module_registry = $module_registry;
+
+
     }
 
     public function handle()

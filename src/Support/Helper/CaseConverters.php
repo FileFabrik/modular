@@ -7,48 +7,13 @@
 
 namespace InterNACHI\Modular\Support\Helper;
 
-use Illuminate\Support\Str;
+use UnexpectedValueException;
 
 /**
  * Changes Kebab Cases
  */
 class CaseConverters
 {
-
-    /**
-     * Test chaking kebab study
-     *
-     * @return void
-     */
-    public function typeShaking()
-    {
-    }
-
-    public static function toComposerVendorName(string $name)
-    {
-        // todo does not start with -
-        return Str::kebab($name);
-    }
-
-    public static function toComposerModuleName(string $name)
-    {
-        return Str::kebab($name);
-    }
-
-    public static function toNamespace(string $name)
-    {
-        return Str::studly($name);
-    }
-
-    public static function clear()
-    {
-        // todo later
-        // strip all but not
-        // double spaces
-        // dots not allowed
-        // double --
-
-    }
 
     public static function composerName(string $vendor, string $module)
     {
@@ -59,10 +24,33 @@ class CaseConverters
         return $vendor . '/' . $module;
     }
 
-    public static function composerNamespacing(array $segments)
+    /**
+     * @param array $segments
+     *
+     * @return string
+     */
+    public static function composerNamespacing(array $segments): string
     {
         return implode('\\', $segments);
     }
 
+    /**
+     *
+     * @param string $composerName
+     *
+     * @return array
+     */
+    public static function fromComposerName(string $composerName): array
+    {
+        $ex = self::splitComposerName($composerName);
+
+        return (count($ex) === 2) ? $ex :
+            throw new UnexpectedValueException('Composer-Name does not looks valid:' . $composerName);
+    }
+
+    public static function splitComposerName(string $composerName): array
+    {
+        return explode('/', $composerName);
+    }
 
 }

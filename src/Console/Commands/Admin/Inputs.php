@@ -16,14 +16,17 @@ use function Laravel\Prompts\text;
  */
 class Inputs
 {
-    public static function existingComposerVendors()
+    /**
+     * @return int|string
+     */
+    public static function existingComposerVendors(): int|string
     {
         // todo read vendors from app-modules
         // todo insert default vendor from app config
         return select('Use an existing Vendor?',
                       ['existing "Filefabrik"',
                        'existing "Other Namespace"',
-                       '' . ModulesAdmin::$flagNewComposerVendor]);
+                       ModulesAdmin::$flagNewComposerVendor]);
     }
 
     /**
@@ -31,7 +34,7 @@ class Inputs
      *
      * @return string
      */
-    public static function composerVendor()
+    public static function composerVendor(): string
     {
         // your company in composer.json "name": "$vendor_namespace/laravel",
         return text(label      : 'Your vendor namespace in composer?',
@@ -40,7 +43,10 @@ class Inputs
                     hint       : '// your company in composer.json "name": "$vendor_namespace/laravel"');
     }
 
-    public static function moduleName()
+    /**
+     * @return string
+     */
+    public static function moduleName(): string
     {
         // your company in composer.json "name": "$vendor_namespace/laravel",
         return text(label      : 'Name of your module?',
